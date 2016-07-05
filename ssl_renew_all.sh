@@ -1,3 +1,5 @@
+# This script renews SSL certs for all subdomains attached to a cPanel account
+
 # Setup variables for arguments passed
 cpUsername=$1
 email=$2

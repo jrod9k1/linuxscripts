@@ -2,7 +2,7 @@
 cpUsername=$1
 email=$2
 
-LOCKFILE="/var/lock/json_test" # Location to store the lock file
+LOCKFILE="/var/lock/renew_chooch" # Location to store the lock file
 OUTFILE="/tmp/domains.json" # Location to store the API JSON output
 debug=0 # Should the script spit out debug output?
 

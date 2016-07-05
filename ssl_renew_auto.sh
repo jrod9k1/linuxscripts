@@ -17,16 +17,22 @@ decho () {
 domain=$1
 cpUsername=$2
 email=$3
+path=$4
 
 # Check if the user has passed 3 variables
 if [[ -z "$3" ]]
 then
 	echo "Please enter arguments..."
 	echo
-	echo "Usgage: ./ssl_renew_auto.sh <domain> <username> <contact email>"
+	echo "Usgage: ./ssl_renew_auto.sh <domain> <username> <contact email> <documentroot (optional)>"
 	exit 1
 fi
 
+# Check if the user passed the document root param, if not default back
+if [[ -z $path ]]
+then
+	path=/home/$cpUsername/public_html
+fi
 
 # Start and get all of the information organized
 echo
@@ -37,11 +43,12 @@ echo
 decho "I received $domain for the domain."
 decho "I received $cpUsername for the cPanel username."
 decho "I received $email for the email."
+decho "I received $path for the path"
 echo
 
 # Setup the LetsEncrypt script
 echo "Retrieving SSL information..."
-lcmd="$le --text --agree-tos --email $email certonly --renew-by-default --webroot --webroot-path /home/$cpUsername/public_html -d $domain"
+lcmd="$le --text --agree-tos --email $email certonly --renew-by-default --webroot --webroot-path $path -d $domain"
 echo
 echo "The command is '$lcmd'"
 echo "Running..."

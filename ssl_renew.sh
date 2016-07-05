@@ -4,7 +4,7 @@
 # The location of the LetsEncrypt binary
 le="/root/letsencrypt/letsencrypt-auto"
 # Set this to 0 to disable debug output or 1 to enable
-debug=1
+debug=0
 
 # Function for debug output
 decho () {

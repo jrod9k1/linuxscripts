@@ -1,9 +1,10 @@
 # This is a script to automatically update ssl certificates for websites on a cPanel server
+# Note that this script will also install a script to a website/account if none previosly exists
 
 # The location of the LetsEncrypt binary
 le="/root/letsencrypt/letsencrypt-auto"
 # Set this to 0 to disable debug output or 1 to enable
-debug=0
+debug=1
 
 # Function for debug output
 decho () {
@@ -12,23 +13,30 @@ decho () {
 	fi
 }
 
+# Setup the variables that the user has passed
+domain=$1
+cpUsername=$2
+email=$3
 
-# Start and ask the user for information regarding the domain
+# Check if the user has passed 3 variables
+if [[ -z "$3" ]]
+then
+	echo "Please enter arguments..."
+	echo
+	echo "Usgage: ./ssl_renew_auto.sh <domain> <username> <contact email>"
+	exit 1
+fi
+
+
+# Start and get all of the information organized
 echo
 echo "LetsEncrypt cPanel Auto Updater v1.0 by JRod"
-echo "Please answer all questions truthfully, you are under oath."
-echo
-read -p "Domain: " domain
-read -p "cPanel Username: " cpUsername
-read -p "Email: " email
-echo
-echo "Thanks mate."
 
 # Debug junk
 echo
-decho "You entered $domain for the domain."
-decho "You entered $cpUsername for the cPanel username."
-decho "You entered $email for the email."
+decho "I received $domain for the domain."
+decho "I received $cpUsername for the cPanel username."
+decho "I received $email for the email."
 echo
 
 # Setup the LetsEncrypt script
@@ -36,15 +44,8 @@ echo "Retrieving SSL information..."
 lcmd="$le --text --agree-tos --email $email certonly --renew-by-default --webroot --webroot-path /home/$cpUsername/public_html -d $domain"
 echo
 echo "The command is '$lcmd'"
-# Check with the user to ensure they are OK with the command being run
-read -p "Are you OK with this (y/n)? " -n 1 -r
+echo "Running..."
 echo
-# Check the user's answer
-if [[ ! $REPLY =~ ^[Yy]$ ]]
-then
-	echo "Exiting..."
-	exit 1
-fi
 
 # User has accepted, run the command
 eval $lcmd
